@@ -1347,7 +1347,10 @@ def build_anthropic_kwargs(
             kwargs.pop("tools", None)
         elif isinstance(tool_choice, str):
             # Specific tool name
-            kwargs["tool_choice"] = {"type": "tool", "name": tool_choice}
+            choice_name = tool_choice
+            if is_oauth and not choice_name.startswith(_MCP_TOOL_PREFIX):
+                choice_name = _MCP_TOOL_PREFIX + choice_name
+            kwargs["tool_choice"] = {"type": "tool", "name": choice_name}
 
     # Map reasoning_config to Anthropic's thinking parameter.
     # Claude 4.6 models use adaptive thinking + output_config.effort.

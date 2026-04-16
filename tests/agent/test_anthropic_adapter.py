@@ -1694,3 +1694,15 @@ class TestToolChoice:
             tool_choice="search",
         )
         assert kwargs["tool_choice"] == {"type": "tool", "name": "search"}
+
+    def test_oauth_specific_tool_choice_is_prefixed(self):
+        kwargs = build_anthropic_kwargs(
+            model="claude-opus-4-6",
+            messages=[{"role": "user", "content": "Hi"}],
+            tools=self._DUMMY_TOOL,
+            max_tokens=4096,
+            reasoning_config=None,
+            tool_choice="test",
+            is_oauth=True,
+        )
+        assert kwargs["tool_choice"] == {"type": "tool", "name": "mcp_test"}
